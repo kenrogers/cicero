@@ -53,11 +53,12 @@ const data = {
       url: "/dashboard",
       icon: IconDashboard,
     },
-    {
-      title: "Payment gated",
-      url: "/dashboard/payment-gated",
-      icon: IconSparkles,
-    },
+    // Uncomment when billing is enabled:
+    // {
+    //   title: "Premium Features",
+    //   url: "/dashboard/payment-gated",
+    //   icon: IconSparkles,
+    // },
   ],
   // Admin-only navigation items
   navAdmin: [
