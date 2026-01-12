@@ -1,0 +1,20 @@
+{
+  "project_name": "[Project Name]",
+  "created": "YYYY-MM-DD",
+  "mode": "interactive",
+  "depth": "standard",
+  "project_type": "greenfield",
+  "options": {
+    "auto_commit": true,
+    "verify_before_commit": true,
+    "create_summaries": true,
+    "track_time": false
+  },
+  "conventions": {
+    "commit_types": ["feat", "fix", "refactor", "test", "docs", "chore", "style"],
+    "branch_strategy": "main",
+    "test_command": "npm run test",
+    "typecheck_command": "npm run typecheck",
+    "lint_command": "npm run lint"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/mcp-servers.json",
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest", "--headless", "--isolated"]
+    }
+  }
+}
