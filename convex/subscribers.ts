@@ -8,9 +8,58 @@ import { v } from "convex/values";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Rate limit: 5 attempts per email per minute
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX_ATTEMPTS = 5;
+
+/**
+ * Check and update rate limit for a given key.
+ * Returns true if request is allowed, false if rate limited.
+ */
+async function checkRateLimit(
+  ctx: { db: any },
+  key: string
+): Promise<boolean> {
+  const now = Date.now();
+
+  const existing = await ctx.db
+    .query("rateLimits")
+    .withIndex("byKey", (q: any) => q.eq("key", key))
+    .unique();
+
+  if (!existing) {
+    await ctx.db.insert("rateLimits", {
+      key,
+      count: 1,
+      windowStart: now,
+    });
+    return true;
+  }
+
+  // Check if window has expired
+  if (now - existing.windowStart > RATE_LIMIT_WINDOW_MS) {
+    await ctx.db.patch(existing._id, {
+      count: 1,
+      windowStart: now,
+    });
+    return true;
+  }
+
+  // Check if under limit
+  if (existing.count < RATE_LIMIT_MAX_ATTEMPTS) {
+    await ctx.db.patch(existing._id, {
+      count: existing.count + 1,
+    });
+    return true;
+  }
+
+  return false;
+}
+
 /**
  * Subscribe an email address to notifications.
  * Uses upsert pattern - reactivates if previously unsubscribed.
+ * Rate limited to prevent spam.
  */
 export const subscribe = mutation({
   args: {
@@ -25,6 +74,16 @@ export const subscribe = mutation({
 
     if (!EMAIL_REGEX.test(email)) {
       return { success: false, message: "Invalid email format" };
+    }
+
+    // Rate limit by email to prevent spam
+    const rateLimitKey = `subscribe:${email}`;
+    const allowed = await checkRateLimit(ctx, rateLimitKey);
+    if (!allowed) {
+      return {
+        success: false,
+        message: "Too many attempts. Please try again in a minute.",
+      };
     }
 
     const existing = await ctx.db

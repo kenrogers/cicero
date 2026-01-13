@@ -71,6 +71,14 @@ export default defineSchema({
       .index("byEmail", ["email"])
       .index("byStatus", ["status"]),
 
+    // Rate limiting for public endpoints
+    rateLimits: defineTable({
+      key: v.string(), // e.g., "subscribe:email@example.com" or "subscribe:ip:1.2.3.4"
+      count: v.number(),
+      windowStart: v.number(), // Unix timestamp
+    })
+      .index("byKey", ["key"]),
+
     // ============================================
     // STARTER KIT: Users & Security
     // ============================================
