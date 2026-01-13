@@ -10,11 +10,19 @@
 
 import type * as http from "../http.js";
 import type * as lib_securityLogger from "../lib/securityLogger.js";
+import type * as meetings from "../meetings.js";
 import type * as paymentAttemptTypes from "../paymentAttemptTypes.js";
 import type * as paymentAttempts from "../paymentAttempts.js";
+import type * as pipeline from "../pipeline.js";
+import type * as scraper from "../scraper.js";
 import type * as security from "../security.js";
 import type * as seedSecurityEvents from "../seedSecurityEvents.js";
+import type * as summaries from "../summaries.js";
+import type * as summarizer from "../summarizer.js";
+import type * as transcriber from "../transcriber.js";
+import type * as transcriberHelpers from "../transcriberHelpers.js";
 import type * as users from "../users.js";
+import type * as videoExtractor from "../videoExtractor.js";
 
 import type {
   ApiFromModules,
@@ -25,11 +33,19 @@ import type {
 declare const fullApi: ApiFromModules<{
   http: typeof http;
   "lib/securityLogger": typeof lib_securityLogger;
+  meetings: typeof meetings;
   paymentAttemptTypes: typeof paymentAttemptTypes;
   paymentAttempts: typeof paymentAttempts;
+  pipeline: typeof pipeline;
+  scraper: typeof scraper;
   security: typeof security;
   seedSecurityEvents: typeof seedSecurityEvents;
+  summaries: typeof summaries;
+  summarizer: typeof summarizer;
+  transcriber: typeof transcriber;
+  transcriberHelpers: typeof transcriberHelpers;
   users: typeof users;
+  videoExtractor: typeof videoExtractor;
 }>;
 
 /**

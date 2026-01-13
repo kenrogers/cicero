@@ -3,6 +3,78 @@ import { v } from "convex/values";
 import { paymentAttemptSchemaValidator } from "./paymentAttemptTypes";
 
 export default defineSchema({
+    // ============================================
+    // CICERO: City Council Meeting Summaries
+    // ============================================
+
+    meetings: defineTable({
+      // Municode meeting ID (e.g., "6b92f33287e5498795a9f5193c7374d9")
+      municodeId: v.string(),
+      date: v.number(), // Unix timestamp
+      title: v.string(),
+      type: v.union(v.literal("regular"), v.literal("work_session"), v.literal("special")),
+      agendaUrl: v.optional(v.string()),
+      agendaPacketUrl: v.optional(v.string()),
+      videoPageUrl: v.optional(v.string()),
+      videoUrl: v.optional(v.string()),
+      status: v.union(
+        v.literal("pending"),
+        v.literal("processing"),
+        v.literal("complete"),
+        v.literal("failed")
+      ),
+      errorMessage: v.optional(v.string()),
+      processedAt: v.optional(v.number()),
+    })
+      .index("byMunicodeId", ["municodeId"])
+      .index("byStatus", ["status"])
+      .index("byDate", ["date"]),
+
+    summaries: defineTable({
+      meetingId: v.id("meetings"),
+      tldr: v.string(),
+      keyTopics: v.array(
+        v.object({
+          title: v.string(),
+          summary: v.string(),
+          sentiment: v.optional(v.union(
+            v.literal("positive"),
+            v.literal("negative"),
+            v.literal("neutral"),
+            v.literal("controversial")
+          )),
+        })
+      ),
+      decisions: v.array(
+        v.object({
+          title: v.string(),
+          description: v.string(),
+          vote: v.optional(v.string()),
+        })
+      ),
+      actionSteps: v.array(
+        v.object({
+          action: v.string(),
+          details: v.string(),
+          contactInfo: v.optional(v.string()),
+        })
+      ),
+      transcriptStorageId: v.optional(v.id("_storage")),
+    })
+      .index("byMeetingId", ["meetingId"]),
+
+    subscribers: defineTable({
+      email: v.string(),
+      status: v.union(v.literal("active"), v.literal("unsubscribed")),
+      lastEmailedAt: v.optional(v.number()),
+    })
+      .index("byEmail", ["email"])
+      .index("byStatus", ["status"]),
+
+    // ============================================
+    // STARTER KIT: Users & Security
+    // ============================================
+
     users: defineTable({
       name: v.string(),
       // this the Clerk ID, stored in the subject JWT field
