@@ -102,11 +102,11 @@ Configure production Convex and Vercel deployments.
 ---
 
 ## Success Criteria
-- [ ] Loading skeletons appear during data fetch
-- [ ] Errors show friendly messages with recovery options
-- [ ] Meeting pages have proper OG tags for social sharing
-- [ ] Sitemap is accessible at /sitemap.xml
-- [ ] Rate limiting prevents subscribe spam
+- [x] Loading skeletons appear during data fetch
+- [x] Errors show friendly messages with recovery options
+- [x] Meeting pages have proper OG tags for social sharing
+- [x] Sitemap is accessible at /sitemap.xml
+- [x] Rate limiting prevents subscribe spam
 - [ ] Production deployment live and functional
 - [ ] Can process a real meeting end-to-end in production
 
