@@ -66,11 +66,11 @@ Show full summary for a single meeting.
 ---
 
 ## Success Criteria
-- [ ] Landing page explains Cicero clearly
-- [ ] Meetings list shows all completed summaries
-- [ ] Meeting detail page shows full summary with all sections
-- [ ] Navigation between pages works
-- [ ] Pages render server-side for AI crawlers
+- [x] Landing page explains Cicero clearly
+- [x] Meetings list shows all completed summaries
+- [x] Meeting detail page shows full summary with all sections
+- [x] Navigation between pages works
+- [ ] Pages render server-side for AI crawlers (partial - detail page is client-rendered)
 
 ## Dependencies
 - At least one meeting with status "complete" and summary populated
