@@ -1,89 +1,81 @@
-# Phase 3: AI Processing Pipeline
+# Phase 4: Web Interface
 
 ## Goal
-Process a meeting into a summary by extracting video URLs, transcribing audio, parsing agendas, and generating AI summaries.
+Build the public-facing web interface for browsing City Council meeting summaries and subscribing for email updates.
 
 ## Context
-- Schema already has `summaries` table with keyTopics, decisions, actionSteps
-- Meetings have `videoPageUrl` (Cablecast page) but need actual video URL
-- Using OpenRouter for AI (decision in STATE.md)
-- Transcription: Whisper API or AssemblyAI (TBD this phase)
+- Existing landing page in `app/(landing)/` with starter kit content - needs Cicero-focused replacement
+- Convex queries exist: `meetings.list`, `meetings.getById`, `summaries.getByMeetingId`
+- SSG important for AI crawler discoverability (from llm-seo lesson)
+- UI components available in `components/ui/`, `components/magicui/`, etc.
 
 ## Tasks
 
-### Task 1: Video URL Extraction from Cablecast
-Extract the actual video URL from Cablecast VOD pages.
+### Task 1: Cicero Landing Page
+Replace starter kit landing page content with Cicero-focused messaging.
 
-**Files to create**:
-- `convex/videoExtractor.ts` - Action to extract video URL from Cablecast page
+**Files to modify**:
+- `app/(landing)/hero-section.tsx` - Cicero headline, value prop, CTA
+- `app/(landing)/features-section.tsx` - Key features (summaries, action items, email alerts)
+- `app/(landing)/workflow-section.tsx` - How it works (scrape → transcribe → summarize → notify)
+- `app/(landing)/call-to-action.tsx` - Email signup CTA
+- `app/(landing)/faqs.tsx` - Cicero-specific FAQs
 
-**Logic**:
-1. Fetch the videoPageUrl HTML
-2. Parse to find the actual video source URL (likely in a video player embed)
-3. Update meeting with extracted videoUrl
-4. Handle cases where video isn't available yet
+**Keep minimal**: Focus on clarity over polish. Can enhance in Phase 6.
 
-**Verify**: Extract video URL from one real meeting, confirm it's a playable video URL
-
----
-
-### Task 2: Transcription with AssemblyAI
-Transcribe meeting video audio using AssemblyAI (better for long-form than Whisper).
-
-**Files to create**:
-- `convex/transcriber.ts` - Action to submit video for transcription and retrieve result
-
-**Logic**:
-1. Submit video URL to AssemblyAI
-2. Poll for completion (or use webhook callback)
-3. Store transcript in Convex storage
-4. Update meeting status to "processing" → "transcribed"
-
-**Environment variables needed**:
-- `ASSEMBLYAI_API_KEY`
-
-**Verify**: Transcribe one meeting, get readable text output
+**Verify**: Landing page clearly explains Cicero's purpose
 
 ---
 
-### Task 3: AI Summarization with OpenRouter
-Generate structured summary from transcript + agenda context.
+### Task 2: Meetings List Page
+Display all meetings with summaries, sorted by date.
 
 **Files to create**:
-- `convex/summarizer.ts` - Action to generate summary via OpenRouter
+- `app/meetings/page.tsx` - List of meetings with status badges
+- `app/meetings/MeetingsList.tsx` - Client component for Convex query
 
-**Logic**:
-1. Load transcript from storage
-2. Optionally fetch agenda PDF and extract text
-3. Call OpenRouter with structured prompt
-4. Parse response into keyTopics, decisions, actionSteps
-5. Store summary in summaries table
-6. Update meeting status to "complete"
+**Requirements**:
+- Show meeting title, date, type (badge), status
+- Link completed meetings to detail page
+- Show "Coming soon" for pending/processing
+- Use existing `meetings.list` query with `status: "complete"` filter
 
-**Environment variables needed**:
-- `OPENROUTER_API_KEY`
+**Verify**: Can see list of processed meetings
 
-**Prompt structure**:
-- System: "You are a civic engagement assistant..."
-- User: Transcript + agenda context
-- Output: JSON matching summaries schema
+---
 
-**Verify**: Generate summary for one transcribed meeting
+### Task 3: Meeting Detail Page
+Show full summary for a single meeting.
+
+**Files to create**:
+- `app/meetings/[id]/page.tsx` - Meeting detail with summary
+- `app/meetings/[id]/MeetingDetail.tsx` - Client component
+
+**Requirements**:
+- Display: title, date, type, TLDR
+- Key Topics section (with sentiment badges if present)
+- Decisions section (with vote results)
+- Action Steps section (with contact info)
+- Link to original agenda PDF if available
+- Back link to meetings list
+
+**SSG**: Use `generateStaticParams` for completed meetings (AI crawler discoverability)
+
+**Verify**: Can view full summary for a processed meeting
 
 ---
 
 ## Success Criteria
-- [x] Can extract video URL from Cablecast page
-- [x] Can transcribe a meeting video
-- [x] Can generate structured summary
-- [x] Meeting status progresses: pending → processing → complete
-- [ ] Summary appears in Convex dashboard with all fields populated (requires testing)
+- [ ] Landing page explains Cicero clearly
+- [ ] Meetings list shows all completed summaries
+- [ ] Meeting detail page shows full summary with all sections
+- [ ] Navigation between pages works
+- [ ] Pages render server-side for AI crawlers
 
 ## Dependencies
-- AssemblyAI account + API key
-- OpenRouter account + API key
+- At least one meeting with status "complete" and summary populated
 
 ## Notes
-- Phase 3 is marked "Large" in roadmap - may need to split further
-- Start with one meeting end-to-end before batch processing
-- PDF parsing can be basic for MVP (may enhance later)
+- Email signup form moved to Phase 5 (with full email system)
+- Skip fancy animations for MVP - can add in Phase 6
+- Keep styling consistent with existing UI components

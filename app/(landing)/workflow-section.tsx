@@ -1,112 +1,87 @@
-import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Brain, GitBranch, Layers, Repeat, Zap } from 'lucide-react'
+import { Video, FileAudio, Brain, Mail } from 'lucide-react'
 
 export default function WorkflowSection() {
     return (
-        <section className="py-16 md:py-24">
+        <section id="how-it-works" className="py-16 md:py-24">
             <div className="mx-auto w-full max-w-5xl px-6">
                 <div className="text-center mb-12">
-                    <Badge variant="outline" className="mb-4">The /work Workflow</Badge>
+                    <Badge variant="outline" className="mb-4">How It Works</Badge>
                     <h2 className="text-foreground text-3xl md:text-4xl font-semibold">
-                        One command to rule them all
+                        From meeting to summary in hours
                     </h2>
                     <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
-                        Instead of writing prompts from scratch, use a single command that handles 
-                        planning, execution, and learning automatically.
+                        We automatically process City Council meetings so you don&apos;t have to watch them.
                     </p>
                 </div>
 
-                {/* Workflow diagram */}
-                <div className="bg-card border rounded-2xl p-6 md:p-8 mb-12">
-                    <div className="font-mono text-sm md:text-base">
-                        <div className="border border-border rounded-lg p-4 md:p-6 bg-muted/30">
-                            <div className="text-center text-lg md:text-xl font-semibold mb-4 text-primary">/work</div>
-                            <div className="border-t border-border pt-4 space-y-3 md:space-y-4">
-                                <div className="flex items-start gap-3">
-                                    <div className="flex items-center justify-center size-8 rounded-full bg-primary/10 text-primary shrink-0">
-                                        <Brain className="size-4" />
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold">1. LEARN</span>
-                                        <span className="text-muted-foreground ml-2">- Auto-check lessons for relevant learnings</span>
-                                    </div>
-                                </div>
-                                <div className="flex items-start gap-3">
-                                    <div className="flex items-center justify-center size-8 rounded-full bg-primary/10 text-primary shrink-0">
-                                        <Zap className="size-4" />
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold">2. DO</span>
-                                        <span className="text-muted-foreground ml-2">- Route to appropriate GSD action</span>
-                                    </div>
-                                </div>
-                                <div className="flex items-start gap-3">
-                                    <div className="flex items-center justify-center size-8 rounded-full bg-primary/10 text-primary shrink-0">
-                                        <Repeat className="size-4" />
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold">3. CAPTURE</span>
-                                        <span className="text-muted-foreground ml-2">- Prompt for retrospective when done</span>
-                                    </div>
-                                </div>
+                {/* Pipeline diagram */}
+                <div className="bg-card border rounded-2xl p-6 md:p-8">
+                    <div className="grid gap-6 md:grid-cols-4">
+                        <div className="text-center">
+                            <div className="mx-auto flex items-center justify-center size-14 rounded-full bg-primary/10 text-primary mb-4">
+                                <Video className="size-6" />
                             </div>
+                            <h3 className="font-semibold mb-2">1. Capture</h3>
+                            <p className="text-sm text-muted-foreground">
+                                Meeting videos are automatically detected from the city&apos;s public archive.
+                            </p>
+                        </div>
+
+                        <div className="text-center">
+                            <div className="mx-auto flex items-center justify-center size-14 rounded-full bg-primary/10 text-primary mb-4">
+                                <FileAudio className="size-6" />
+                            </div>
+                            <h3 className="font-semibold mb-2">2. Transcribe</h3>
+                            <p className="text-sm text-muted-foreground">
+                                Audio is converted to text using state-of-the-art speech recognition.
+                            </p>
+                        </div>
+
+                        <div className="text-center">
+                            <div className="mx-auto flex items-center justify-center size-14 rounded-full bg-primary/10 text-primary mb-4">
+                                <Brain className="size-6" />
+                            </div>
+                            <h3 className="font-semibold mb-2">3. Analyze</h3>
+                            <p className="text-sm text-muted-foreground">
+                                AI extracts key topics, decisions, votes, and action items.
+                            </p>
+                        </div>
+
+                        <div className="text-center">
+                            <div className="mx-auto flex items-center justify-center size-14 rounded-full bg-primary/10 text-primary mb-4">
+                                <Mail className="size-6" />
+                            </div>
+                            <h3 className="font-semibold mb-2">4. Deliver</h3>
+                            <p className="text-sm text-muted-foreground">
+                                Summaries are published online and sent to email subscribers.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Connection lines for desktop */}
+                    <div className="hidden md:block mt-6">
+                        <div className="flex justify-between px-[calc(12.5%-14px)]">
+                            <div className="h-0.5 flex-1 bg-border mt-2 mx-4" />
+                            <div className="h-0.5 flex-1 bg-border mt-2 mx-4" />
+                            <div className="h-0.5 flex-1 bg-border mt-2 mx-4" />
                         </div>
                     </div>
                 </div>
 
-                {/* Problem/Solution grid */}
-                <div className="grid gap-4 md:grid-cols-2">
-                    <Card className="bg-red-500/5 border-red-500/20">
-                        <CardContent className="pt-6">
-                            <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                                <span className="text-red-500">✕</span> The Problem
-                            </h3>
-                            <ul className="space-y-3 text-muted-foreground">
-                                <li className="flex items-start gap-2">
-                                    <span className="text-red-400 mt-1">•</span>
-                                    <span>Repeating the same mistakes across sessions</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-red-400 mt-1">•</span>
-                                    <span>Lost context between coding sessions</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-red-400 mt-1">•</span>
-                                    <span>Forgotten lessons that never compound</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-red-400 mt-1">•</span>
-                                    <span>Vague AI prompts that produce inconsistent results</span>
-                                </li>
-                            </ul>
-                        </CardContent>
-                    </Card>
-                    <Card className="bg-green-500/5 border-green-500/20">
-                        <CardContent className="pt-6">
-                            <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                                <span className="text-green-500">✓</span> The Solution
-                            </h3>
-                            <ul className="space-y-3 text-muted-foreground">
-                                <li className="flex items-start gap-2">
-                                    <span className="text-green-400 mt-1">•</span>
-                                    <span>Past lessons surface automatically before you start</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-green-400 mt-1">•</span>
-                                    <span>Reads project state and picks up where you left off</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-green-400 mt-1">•</span>
-                                    <span>Prompts you to capture learnings when work completes</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-green-400 mt-1">•</span>
-                                    <span>Plans are structured, executable, and atomic</span>
-                                </li>
-                            </ul>
-                        </CardContent>
-                    </Card>
+                {/* Data sources */}
+                <div className="mt-8 text-center">
+                    <p className="text-sm text-muted-foreground mb-3">Data sourced from official city records</p>
+                    <div className="flex flex-wrap items-center justify-center gap-4">
+                        <div className="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm">
+                            <span className="font-medium">Municode</span>
+                            <span className="text-muted-foreground text-xs">• Agendas</span>
+                        </div>
+                        <div className="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm">
+                            <span className="font-medium">Cablecast</span>
+                            <span className="text-muted-foreground text-xs">• Videos</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

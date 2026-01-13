@@ -16,10 +16,9 @@ import { useTheme } from "next-themes"
 
 
 const menuItems = [
-    { name: 'Features', href: '#features' },
-    { name: 'Docs', href: 'https://github.com/kenrogers/vibe-coders-starter-kit#readme' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Community', href: 'https://skool.com/vibecoders/about' },
+    { name: 'Meetings', href: '/meetings' },
+    { name: 'How It Works', href: '#how-it-works' },
+    { name: 'FAQ', href: '#faq' },
 ]
 
 export const HeroHeader = () => {
@@ -56,7 +55,7 @@ export const HeroHeader = () => {
                                 aria-label="home"
                                 className="flex items-center space-x-2">
                                 <ChatMaxingIconColoured />
-                                <span className="text-xl font-medium">{process.env.NEXT_PUBLIC_SITE_NAME || 'Vibe Coders Kit'}</span>
+                                <span className="text-xl font-medium">Cicero</span>
                             </Link>
 
                             <button

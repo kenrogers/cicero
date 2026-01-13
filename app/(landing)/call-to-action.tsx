@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { ArrowRight, Github } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 export default function CallToAction() {
     return (
@@ -12,10 +12,10 @@ export default function CallToAction() {
                     
                     <div className="relative">
                         <h2 className="text-balance text-3xl md:text-4xl font-semibold">
-                            Stop rebuilding the same foundation over and over.
+                            Stay informed about your city
                         </h2>
                         <p className="mt-4 text-muted-foreground text-lg max-w-xl mx-auto">
-                            Auth, payments, real-time data, security, and a workflow system that actually helps you ship.
+                            Browse meeting summaries now, or sign up to get notified when new summaries are available.
                         </p>
 
                         <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -23,33 +23,15 @@ export default function CallToAction() {
                                 asChild
                                 size="lg"
                                 className="gap-2">
-                                <Link href="https://github.com/kenrogers/vibe-coders-starter-kit">
-                                    <Github className="size-4" />
-                                    <span>Use This Template</span>
+                                <Link href="/meetings">
+                                    <span>Browse Summaries</span>
                                     <ArrowRight className="size-4" />
-                                </Link>
-                            </Button>
-
-                            <Button
-                                asChild
-                                size="lg"
-                                variant="outline">
-                                <Link href="https://skool.com/vibecoders/about">
-                                    <span>Join Vibe Coders</span>
                                 </Link>
                             </Button>
                         </div>
 
                         <p className="mt-8 text-sm text-muted-foreground">
-                            Built with ❤️ by{' '}
-                            <Link href="https://kenrogers.co" className="underline hover:text-foreground transition-colors">
-                                Ken Rogers
-                            </Link>
-                            {' '}for the{' '}
-                            <Link href="https://skool.com/vibecoders/about" className="underline hover:text-foreground transition-colors">
-                                Vibe Coders
-                            </Link>
-                            {' '}community
+                            Free and open source. Built for Fort Collins residents.
                         </p>
                     </div>
                 </div>

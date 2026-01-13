@@ -1,74 +1,51 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { 
-    Workflow, 
-    BookOpen, 
-    Shield, 
-    Palette, 
-    Database,
-    CreditCard,
-    Lock,
-    Zap
+    FileText, 
+    CheckCircle, 
+    Bell, 
+    Clock,
+    Vote,
+    Users
 } from 'lucide-react'
 
 const features = [
     {
-        icon: Workflow,
-        title: "Workflow System",
-        description: "The /work command guides every session with predictable, proven loops for planning and execution.",
+        icon: FileText,
+        title: "Meeting Summaries",
+        description: "Every City Council meeting distilled into clear, readable summaries with key topics highlighted.",
         badge: "Core"
     },
     {
-        icon: BookOpen,
-        title: "Skills Library",
-        description: "Pre-built patterns for security, design, and common tasks that activate when you need them.",
+        icon: Vote,
+        title: "Decisions Tracked",
+        description: "See what was voted on, who voted how, and what passed or failed—all in one place.",
         badge: "Core"
     },
     {
-        icon: Zap,
-        title: "Learning System",
-        description: "Captures what works and applies it automatically. Your institutional knowledge grows over time.",
+        icon: CheckCircle,
+        title: "Action Items",
+        description: "Know how to get involved. Each summary includes ways to take action on issues you care about.",
         badge: "Core"
     },
     {
-        icon: Lock,
-        title: "Authentication",
-        description: "Complete auth with Clerk—users, sessions, social login, all wired up and ready to go.",
-        badge: "Infrastructure"
+        icon: Bell,
+        title: "Email Alerts",
+        description: "Get notified when new summaries are ready. Never miss an important council decision.",
+        badge: "Coming Soon"
     },
     {
-        icon: CreditCard,
-        title: "Payments",
-        description: "Subscription billing with Clerk Billing and Stripe. No payment code to write yourself.",
-        badge: "Infrastructure"
+        icon: Clock,
+        title: "Save Hours",
+        description: "Council meetings run 2-3 hours. Our summaries take 5 minutes to read.",
+        badge: "Benefit"
     },
     {
-        icon: Database,
-        title: "Real-time Database",
-        description: "Convex gives you a serverless, real-time database with automatic syncing.",
-        badge: "Infrastructure"
+        icon: Users,
+        title: "Civic Engagement",
+        description: "Stay informed about your city without the time commitment. Democracy made accessible.",
+        badge: "Benefit"
     },
-    {
-        icon: Shield,
-        title: "Security by Default",
-        description: "CSRF protection, rate limiting, input validation, XSS prevention—all built in.",
-        badge: "Security"
-    },
-    {
-        icon: Palette,
-        title: "Design System",
-        description: "Professional patterns that avoid generic AI aesthetics. Your apps won't look like demos.",
-        badge: "Design"
-    },
-]
-
-const techStack = [
-    { name: "Next.js 15", category: "Framework" },
-    { name: "TailwindCSS v4", category: "Styling" },
-    { name: "shadcn/ui", category: "Components" },
-    { name: "Convex", category: "Database" },
-    { name: "Clerk", category: "Auth" },
-    { name: "Stripe", category: "Payments" },
 ]
 
 export default function FeaturesSection() {
@@ -76,17 +53,17 @@ export default function FeaturesSection() {
         <section className="py-16 md:py-24 bg-muted/30">
             <div className="mx-auto w-full max-w-6xl px-6">
                 <div className="text-center mb-12">
-                    <Badge variant="outline" className="mb-4">Everything You Need</Badge>
+                    <Badge variant="outline" className="mb-4">What You Get</Badge>
                     <h2 className="text-foreground text-3xl md:text-4xl font-semibold">
-                        Production-ready from day one
+                        Everything you need to stay informed
                     </h2>
                     <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
-                        Not just a starter template—a complete system for building and shipping real applications.
+                        AI-powered analysis of every City Council meeting, delivered in a format you can actually use.
                     </p>
                 </div>
 
                 {/* Features grid */}
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-16">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {features.map((feature, index) => (
                         <Card key={index} className="bg-card/50 hover:bg-card transition-colors">
                             <CardHeader className="pb-2">
@@ -107,22 +84,6 @@ export default function FeaturesSection() {
                             </CardContent>
                         </Card>
                     ))}
-                </div>
-
-                {/* Tech stack */}
-                <div className="text-center">
-                    <p className="text-muted-foreground text-sm mb-4">Built with modern tools</p>
-                    <div className="flex flex-wrap items-center justify-center gap-3">
-                        {techStack.map((tech, index) => (
-                            <div 
-                                key={index}
-                                className="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm"
-                            >
-                                <span className="font-medium">{tech.name}</span>
-                                <span className="text-muted-foreground text-xs">• {tech.category}</span>
-                            </div>
-                        ))}
-                    </div>
                 </div>
             </div>
         </section>
