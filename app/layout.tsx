@@ -18,8 +18,39 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: process.env.NEXT_PUBLIC_SITE_NAME || "More Secure Starter",
-  description: "A production-ready SaaS starter with Next.js 15, Clerk, Convex, and comprehensive security features",
+  title: {
+    default: "Cicero | Fort Collins City Council Summaries",
+    template: "%s | Cicero",
+  },
+  description:
+    "AI-powered summaries of Fort Collins City Council meetings. Stay informed about local government decisions, key topics, and how to get involved.",
+  keywords: [
+    "Fort Collins",
+    "City Council",
+    "meeting summaries",
+    "civic engagement",
+    "local government",
+    "Colorado",
+  ],
+  authors: [{ name: "Cicero" }],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "Cicero",
+    title: "Cicero | Fort Collins City Council Summaries",
+    description:
+      "AI-powered summaries of Fort Collins City Council meetings. Stay informed about local government decisions.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Cicero | Fort Collins City Council Summaries",
+    description:
+      "AI-powered summaries of Fort Collins City Council meetings. Stay informed about local government decisions.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

@@ -2,8 +2,14 @@ import { Metadata } from "next";
 import MeetingsList from "./MeetingsList";
 
 export const metadata: Metadata = {
-  title: "Meeting Summaries | Cicero",
-  description: "Browse AI-powered summaries of Fort Collins City Council meetings. Key decisions, action items, and topics - all in one place.",
+  title: "Meeting Summaries",
+  description:
+    "Browse AI-powered summaries of Fort Collins City Council meetings. Key decisions, action items, and topics - all in one place.",
+  openGraph: {
+    title: "Meeting Summaries | Cicero",
+    description:
+      "Browse AI-powered summaries of Fort Collins City Council meetings.",
+  },
 };
 
 export default function MeetingsPage() {
