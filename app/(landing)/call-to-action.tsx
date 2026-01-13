@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
+import { SubscribeForm } from './SubscribeForm'
 
 export default function CallToAction() {
     return (
@@ -15,12 +16,17 @@ export default function CallToAction() {
                             Stay informed about your city
                         </h2>
                         <p className="mt-4 text-muted-foreground text-lg max-w-xl mx-auto">
-                            Browse meeting summaries now, or sign up to get notified when new summaries are available.
+                            Get notified when new meeting summaries are published, or browse existing summaries now.
                         </p>
 
-                        <div className="mt-8 flex flex-wrap justify-center gap-4">
+                        <div className="mt-8">
+                            <SubscribeForm />
+                        </div>
+
+                        <div className="mt-6 flex justify-center">
                             <Button
                                 asChild
+                                variant="outline"
                                 size="lg"
                                 className="gap-2">
                                 <Link href="/meetings">

@@ -93,6 +93,34 @@ export const processOneMeeting = action({
         tldr: summaryResult.tldr,
       };
       result.overallSuccess = true;
+
+      // Notify subscribers (don't fail pipeline if emails fail)
+      if (summaryResult.tldr) {
+        const meeting: { title: string; date: number } | null =
+          await ctx.runQuery(internal.meetings.getByIdInternal, {
+            meetingId: args.meetingId,
+          });
+
+        if (meeting) {
+          const dateStr = new Date(meeting.date).toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+
+          try {
+            await ctx.runAction(internal.emailer.notifyAllSubscribers, {
+              meetingId: args.meetingId,
+              meetingTitle: meeting.title,
+              meetingDate: dateStr,
+              tldr: summaryResult.tldr,
+            });
+          } catch (err) {
+            console.error("Failed to send email notifications:", err);
+          }
+        }
+      }
     } else {
       result.steps.summarization = {
         success: false,

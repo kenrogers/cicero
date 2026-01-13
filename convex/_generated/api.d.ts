@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as emailer from "../emailer.js";
 import type * as http from "../http.js";
 import type * as lib_securityLogger from "../lib/securityLogger.js";
 import type * as meetings from "../meetings.js";
@@ -17,6 +18,7 @@ import type * as pipeline from "../pipeline.js";
 import type * as scraper from "../scraper.js";
 import type * as security from "../security.js";
 import type * as seedSecurityEvents from "../seedSecurityEvents.js";
+import type * as subscribers from "../subscribers.js";
 import type * as summaries from "../summaries.js";
 import type * as summarizer from "../summarizer.js";
 import type * as transcriber from "../transcriber.js";
@@ -31,6 +33,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  emailer: typeof emailer;
   http: typeof http;
   "lib/securityLogger": typeof lib_securityLogger;
   meetings: typeof meetings;
@@ -40,6 +43,7 @@ declare const fullApi: ApiFromModules<{
   scraper: typeof scraper;
   security: typeof security;
   seedSecurityEvents: typeof seedSecurityEvents;
+  subscribers: typeof subscribers;
   summaries: typeof summaries;
   summarizer: typeof summarizer;
   transcriber: typeof transcriber;
