@@ -1,10 +1,45 @@
 ---
 name: frontend-design
-description: Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.
+description: Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Also use for design exploration, UI mockups, visual alternatives, or any design-related requests. Leverages the painter tool for visual concept generation and iteration. Generates creative, polished code and UI design that avoids generic AI aesthetics. Triggers include "design", "UI", "mockup", "landing page", "dashboard", "component", "beautify", "style", "layout", "visual design", "explore designs", "show me designs".
 license: Complete terms in LICENSE.txt
 ---
 
 This skill guides creation of distinctive, production-grade frontend interfaces that avoid generic "AI slop" aesthetics. Implement real working code with exceptional attention to aesthetic details and creative choices.
+
+## 0. Painter Tool for Visual Design
+
+**The `painter` tool is your primary design exploration method.** Use it to generate and iterate on visual concepts before writing code.
+
+### When to Use Painter
+
+- **Exploring UI alternatives**: "show me 3 different designs for this dashboard"
+- **Creating mockups**: Generate visual concepts to align with stakeholders before coding
+- **Editing existing designs**: "update this mockup with a darker theme"
+- **Design inspiration**: Rapidly iterate on visual directions
+- **Asset creation**: Generate icons, illustrations, or decorative elements
+
+### Painter Workflow
+
+1. **Explore first**: Use painter to generate 2-3 visual concepts for the UI
+2. **Iterate**: Refine the chosen direction with painter edits
+3. **Implement**: Convert the approved visual into production code using this skill's guidelines
+
+### Painter Prompt Best Practices
+
+Be specific about:
+- **Dimensions**: "1920x1080 hero section", "375x812 mobile screen"
+- **Style direction**: "brutalist with high contrast", "warm minimal SaaS aesthetic"
+- **Color palette**: Include hex codes when you have brand colors
+- **Layout details**: "asymmetric grid with hero text left, image right"
+- **Typography mood**: "bold geometric sans-serif headlines, refined serif body"
+
+Example prompts:
+- "Dashboard UI mockup. Dark theme #0C0C0C background. Sidebar navigation left. Main content area with analytics cards. Accent color cyan #00D9FF. Modern SaaS aesthetic with Space Grotesk font style. 1440x900."
+- "Landing page hero section. Warm cream background #FBF9F7. Bold asymmetric layout with oversized typography. Luxury editorial feel. 1920x1080."
+
+**IMPORTANT**: Invoke painter explicitly when the user asks to explore designs, create mockups, or wants to see visual alternatives before committing to code.
+
+---
 
 ## 1. Design Analysis (Pre-Code)
 

@@ -1,13 +1,13 @@
 # GSD: Execute Plan
 
 **name**: gsd/execute-plan
-**description**: Execute a PLAN.md file with atomic commits per task. Use when ready to implement a planned phase. Runs tasks sequentially, commits after each, creates SUMMARY.md on completion, and updates STATE.md throughout.
+**description**: Execute a PLAN.md file using TDD (Red-Green-Refactor) with atomic commits per task. Use when ready to implement a planned phase. Every feature follows test-first development, commits after each TDD cycle, creates SUMMARY.md on completion, and updates STATE.md throughout.
 
 ---
 
 ## Purpose
 
-Execute the tasks in a PLAN.md file, committing atomically after each task. This skill handles the implementation phase of GSD, maintaining momentum while capturing progress.
+Execute the tasks in a PLAN.md file using **Test-Driven Development**. Every feature implementation follows the Red-Green-Refactor cycle, ensuring code is tested from the start.
 
 ## Prerequisites
 
@@ -17,13 +17,26 @@ Execute the tasks in a PLAN.md file, committing atomically after each task. This
 
 ## Core Principles
 
+### TDD Is Default
+
+Every task follows Red-Green-Refactor:
+
+```
+Task 1:
+  🔴 RED    → Write failing test
+  🟢 GREEN  → Minimal code to pass
+  🔵 REFACTOR → Clean up (optional)
+  ✓ COMMIT → Test + implementation together
+
+Task 2:
+  🔴 RED → 🟢 GREEN → 🔵 REFACTOR → ✓ COMMIT
+  
+...repeat for each task...
+```
+
 ### Atomic Commits
 
-One commit per task. The `<done>` section of each task contains the commit message.
-
-```
-Task 1 → Execute → Verify → Commit → Task 2 → Execute → Verify → Commit → ...
-```
+One commit per TDD cycle. Each commit includes both the test and implementation.
 
 ### Deviation Rules
 
@@ -54,16 +67,26 @@ Task 1 → Execute → Verify → Commit → Task 2 → Execute → Verify → C
 ```
 1. Load Plan
    └─ Read PLAN.md, validate structure
+   └─ Check testing setup (run npm test to verify)
 
-2. For Each Task:
-   ├─ Read task XML
-   ├─ Execute action steps
-   ├─ Run verification
-   ├─ Git commit with done message
+2. For Each Task (TDD Cycle):
+   ├─ 🔴 RED: Write failing test
+   │   ├─ Focus on behavior, not implementation
+   │   ├─ Run test → confirm FAILS
+   │   └─ Document why it fails
+   ├─ 🟢 GREEN: Minimal implementation
+   │   ├─ Write just enough code to pass
+   │   ├─ Run test → confirm PASSES
+   │   └─ No optimization yet
+   ├─ 🔵 REFACTOR: Improve quality (optional)
+   │   ├─ Extract utilities, improve naming
+   │   ├─ Run test → confirm still PASSES
+   │   └─ Skip if code is already clean
+   ├─ Git commit with test + implementation
    └─ Update STATE.md
 
 3. Create SUMMARY.md
-   └─ What was done, decisions, issues
+   └─ What was done, decisions, issues, test coverage
 
 4. Final Commit
    └─ "docs: complete phase XX plan"
@@ -92,7 +115,7 @@ Validate:
 - [ ] All tasks have required sections
 - [ ] Verification steps are actionable
 
-### Step 2: Execute Tasks
+### Step 2: Execute Tasks with TDD
 
 For each `<task>`:
 
@@ -105,21 +128,102 @@ Extract from XML:
 - `verify`: How to confirm success
 - `done`: Commit message
 
-#### 2b. Execute Action
+#### 2b. 🔴 RED Phase - Write Failing Test
 
-Follow the action steps precisely. If steps are ambiguous:
-- **Interactive mode**: Ask for clarification
-- **YOLO mode**: Make reasonable choice, document in SUMMARY.md
+**Goal**: Describe expected behavior WITHOUT thinking about implementation.
 
-#### 2c. Verify Completion
+```typescript
+// Example: Testing a user profile component
+describe('UserProfile', () => {
+  it('should display user name and email', async () => {
+    render(<UserProfile userId="123" />);
+    
+    expect(await screen.findByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('john@example.com')).toBeInTheDocument();
+  });
+});
+```
 
-Run verification steps from `<verify>`:
+Run the test:
+```bash
+npm run test:run
+```
+
+**Expected**: Test FAILS (component doesn't exist yet)
+
+Document: "Test fails because UserProfile component doesn't exist"
+
+#### 2c. 🟢 GREEN Phase - Minimal Implementation
+
+**Goal**: Write the MINIMUM code to make the test pass.
+
+- Only look at what the test expects
+- Don't over-engineer
+- "Fake it till you make it" is valid
+
+```typescript
+// Minimal implementation to pass
+export function UserProfile({ userId }: { userId: string }) {
+  return (
+    <div>
+      <h1>John Doe</h1>
+      <p>john@example.com</p>
+    </div>
+  );
+}
+```
+
+Run the test:
+```bash
+npm run test:run
+```
+
+**Expected**: Test PASSES
+
+#### 2d. 🔵 REFACTOR Phase - Improve Quality
+
+**Goal**: Clean up without changing behavior.
+
+Evaluate:
+- [ ] Is there duplication to remove?
+- [ ] Are names clear?
+- [ ] Should anything be extracted?
+- [ ] Is the code production-ready?
+
+If YES to any, refactor:
+```typescript
+// Refactored: Actually fetch user data
+export function UserProfile({ userId }: { userId: string }) {
+  const { data: user, isLoading } = useQuery(api.users.get, { id: userId });
+  
+  if (isLoading) return <ProfileSkeleton />;
+  if (!user) return <NotFound />;
+  
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <p>{user.email}</p>
+    </div>
+  );
+}
+```
+
+Run test again:
+```bash
+npm run test:run
+```
+
+**Expected**: Test still PASSES
+
+If NO refactoring needed, skip this phase (valid decision).
+
+#### 2e. Verify All Checks Pass
 
 ```bash
-# Example verifications
-npm run typecheck
-npm run test
-curl http://localhost:3000/api/health
+# Run all verifications
+npm run test:run      # All tests pass
+npm run typecheck     # No type errors
+npm run lint          # No lint errors
 ```
 
 **If verification fails:**

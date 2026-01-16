@@ -107,10 +107,15 @@ Convex is now configured. Your .env.local should have:
 - CONVEX_DEPLOYMENT=dev:...
 - NEXT_PUBLIC_CONVEX_URL=https://...convex.cloud
 
-Now in your Convex dashboard, go to Settings > Environment Variables and add:
+Now set this deployment as your default project environment:
+1. In your Convex dashboard, go to Settings > Project Settings
+2. Under "Default Deployment", select your dev deployment
+3. This ensures `convex dev` uses the correct deployment by default
+
+Then, still in your Convex dashboard, go to Settings > Environment Variables and add:
 - CLERK_JWT_ISSUER_DOMAIN (same value as in .env.local)
 
-Let me know when you've completed this step.
+Let me know when you've completed these steps.
 ```
 
 Wait for user to respond before proceeding.
@@ -123,7 +128,10 @@ Now let's set up webhooks. In your Clerk dashboard:
 
 1. Go to Webhooks
 2. Create a new webhook endpoint:
-   - URL: {NEXT_PUBLIC_CONVEX_URL}/api/webhooks/clerk
+   - URL: Use your Convex **HTTP Actions URL** (NOT the Deployment URL)
+     - Find it in Convex Dashboard > Settings > URL & Deploy Key > HTTP Actions URL
+     - It ends in `.convex.site` (e.g., https://your-project-123.convex.site)
+     - Append the webhook path: https://your-project-123.convex.site/clerk-users-webhook
    - Events: Select all user events and session events
 
 3. Copy the Signing Secret
