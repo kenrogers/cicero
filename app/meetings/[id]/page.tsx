@@ -75,8 +75,8 @@ export default async function MeetingPage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-4xl px-6 py-12">
+    <div className="min-h-screen">
+      <div className="mx-auto max-w-3xl px-6 py-16">
         <MeetingDetail meetingId={id} />
       </div>
     </div>

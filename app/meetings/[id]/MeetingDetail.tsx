@@ -3,22 +3,9 @@
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import {
-  ArrowLeft,
-  Calendar,
-  Clock,
-  FileText,
-  Video,
-  CheckCircle,
-  Vote,
-  Lightbulb,
-  ExternalLink,
-} from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
+import { SubscribeForm } from "@/app/(landing)/SubscribeForm";
 
 function formatDate(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString("en-US", {
@@ -29,37 +16,16 @@ function formatDate(timestamp: number): string {
   });
 }
 
-function formatTime(timestamp: number): string {
-  return new Date(timestamp).toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-}
-
-function getMeetingTypeBadge(type: string) {
+function formatMeetingType(type: string): string {
   switch (type) {
     case "regular":
-      return <Badge variant="default">Regular Meeting</Badge>;
+      return "Regular Meeting";
     case "work_session":
-      return <Badge variant="secondary">Work Session</Badge>;
+      return "Work Session";
     case "special":
-      return <Badge variant="outline">Special Meeting</Badge>;
+      return "Special Meeting";
     default:
-      return <Badge variant="secondary">{type}</Badge>;
-  }
-}
-
-function getSentimentBadge(sentiment?: string) {
-  switch (sentiment) {
-    case "positive":
-      return <Badge className="bg-green-500/10 text-green-600 border-green-500/20">Positive</Badge>;
-    case "negative":
-      return <Badge className="bg-red-500/10 text-red-600 border-red-500/20">Negative</Badge>;
-    case "controversial":
-      return <Badge className="bg-orange-500/10 text-orange-600 border-orange-500/20">Controversial</Badge>;
-    case "neutral":
-    default:
-      return null;
+      return type;
   }
 }
 
@@ -73,165 +39,165 @@ export default function MeetingDetail({ meetingId }: { meetingId: string }) {
 
   if (meeting === undefined || summary === undefined) {
     return (
-      <div className="space-y-6">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-64 w-full" />
+      <div className="space-y-6 animate-pulse">
+        <div className="h-4 w-32 bg-card rounded" />
+        <div className="h-8 w-3/4 bg-card rounded" />
+        <div className="h-48 w-full bg-card rounded" />
       </div>
     );
   }
 
   if (meeting === null) {
     return (
-      <div className="text-center py-12">
-        <h1 className="text-2xl font-bold mb-4">Meeting Not Found</h1>
-        <p className="text-muted-foreground mb-6">
-          This meeting doesn&apos;t exist or has been removed.
+      <div className="text-center py-16">
+        <h1 className="font-cinzel text-2xl mb-4">Meeting Not Found</h1>
+        <p className="text-muted-foreground mb-8">
+          This meeting doesn't exist or has been removed.
         </p>
-        <Button asChild>
-          <Link href="/meetings">
-            <ArrowLeft className="size-4 mr-2" />
-            Back to Meetings
-          </Link>
-        </Button>
+        <Link
+          href="/meetings"
+          className="inline-flex items-center gap-2 text-primary hover:underline"
+        >
+          <ArrowLeft className="size-4" />
+          Back to Meetings
+        </Link>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      {/* Back link */}
-      <Link
-        href="/meetings"
-        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
-      >
-        <ArrowLeft className="size-4 mr-1" />
-        Back to Meetings
-      </Link>
-
-      {/* Header */}
+    <div className="space-y-12">
+      {/* Header with breadcrumb */}
       <div>
-        <div className="flex items-center gap-2 mb-3">
-          {getMeetingTypeBadge(meeting.type)}
-        </div>
-        <h1 className="text-3xl font-bold tracking-tight">{meeting.title}</h1>
-        <div className="flex flex-wrap items-center gap-4 mt-3 text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <Calendar className="size-4" />
-            {formatDate(meeting.date)}
-          </span>
-          <span className="flex items-center gap-1">
-            <Clock className="size-4" />
-            {formatTime(meeting.date)}
-          </span>
-        </div>
+        <Link 
+          href="/" 
+          className="wordmark text-2xl hover:text-primary transition-colors"
+        >
+          CICERO
+        </Link>
+      </div>
+
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-2 text-sm text-muted-foreground">
+        <Link href="/meetings" className="hover:text-foreground transition-colors">
+          Meetings
+        </Link>
+        <span>/</span>
+        <span className="text-foreground">{formatDate(meeting.date)}</span>
+      </nav>
+
+      {/* Title section */}
+      <div>
+        <p className="text-primary text-sm font-medium mb-3">
+          {formatDate(meeting.date)} • {formatMeetingType(meeting.type)}
+        </p>
+        <h1 className="font-cinzel text-3xl md:text-4xl">
+          {meeting.title}
+        </h1>
 
         {/* External links */}
-        <div className="flex flex-wrap gap-3 mt-4">
-          {meeting.agendaUrl && (
-            <Button variant="outline" size="sm" asChild>
-              <a href={meeting.agendaUrl} target="_blank" rel="noopener noreferrer">
-                <FileText className="size-4 mr-2" />
+        {(meeting.agendaUrl || meeting.videoUrl) && (
+          <div className="flex flex-wrap gap-4 mt-6">
+            {meeting.agendaUrl && (
+              <a
+                href={meeting.agendaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
                 View Agenda
-                <ExternalLink className="size-3 ml-1" />
+                <ExternalLink className="size-3" />
               </a>
-            </Button>
-          )}
-          {meeting.videoUrl && (
-            <Button variant="outline" size="sm" asChild>
-              <a href={meeting.videoUrl} target="_blank" rel="noopener noreferrer">
-                <Video className="size-4 mr-2" />
+            )}
+            {meeting.videoUrl && (
+              <a
+                href={meeting.videoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
                 Watch Video
-                <ExternalLink className="size-3 ml-1" />
+                <ExternalLink className="size-3" />
               </a>
-            </Button>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
+
+      {/* Orange divider */}
+      <div className="w-16 h-px bg-primary" />
 
       {/* Summary content */}
       {summary ? (
-        <div className="space-y-6">
-          {/* TLDR */}
+        <div className="space-y-12">
+          {/* TLDR / Summary */}
           {summary.tldr && (
-            <Card className="bg-primary/5 border-primary/20">
-              <CardContent className="p-6">
-                <h2 className="font-semibold text-lg mb-2">Summary</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  {summary.tldr}
-                </p>
-              </CardContent>
-            </Card>
+            <section>
+              <h2 className="text-primary text-sm font-medium uppercase tracking-wide mb-4">
+                Summary
+              </h2>
+              <p className="text-lg leading-relaxed">
+                {summary.tldr}
+              </p>
+            </section>
           )}
 
           {/* Key Topics */}
           {summary.keyTopics && summary.keyTopics.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Lightbulb className="size-5 text-primary" />
-                  Key Topics
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <section>
+              <h2 className="text-primary text-sm font-medium uppercase tracking-wide mb-6">
+                Key Topics
+              </h2>
+              <div className="space-y-6">
                 {summary.keyTopics.map((topic, index) => (
-                  <div key={index} className="border-b last:border-0 pb-4 last:pb-0">
-                    <div className="flex items-start justify-between gap-2 mb-1">
-                      <h3 className="font-medium">{topic.title}</h3>
-                      {getSentimentBadge(topic.sentiment)}
-                    </div>
-                    <p className="text-sm text-muted-foreground">
+                  <div key={index} className="p-6 bg-card rounded-lg">
+                    <h3 className="font-cinzel text-lg mb-2">{topic.title}</h3>
+                    <p className="text-muted-foreground">
                       {topic.summary}
                     </p>
                   </div>
                 ))}
-              </CardContent>
-            </Card>
+              </div>
+            </section>
           )}
 
           {/* Decisions */}
           {summary.decisions && summary.decisions.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Vote className="size-5 text-primary" />
-                  Decisions
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <section>
+              <h2 className="text-primary text-sm font-medium uppercase tracking-wide mb-6">
+                Key Decisions
+              </h2>
+              <div className="space-y-6">
                 {summary.decisions.map((decision, index) => (
-                  <div key={index} className="border-b last:border-0 pb-4 last:pb-0">
-                    <div className="flex items-start justify-between gap-2 mb-1">
-                      <h3 className="font-medium">{decision.title}</h3>
+                  <div key={index} className="p-6 bg-card rounded-lg">
+                    <div className="flex items-start justify-between gap-4 mb-2">
+                      <h3 className="font-cinzel text-lg">{decision.title}</h3>
                       {decision.vote && (
-                        <Badge variant="outline" className="shrink-0">
+                        <span className="text-sm text-primary shrink-0">
                           {decision.vote}
-                        </Badge>
+                        </span>
                       )}
                     </div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground">
                       {decision.description}
                     </p>
                   </div>
                 ))}
-              </CardContent>
-            </Card>
+              </div>
+            </section>
           )}
 
           {/* Action Items */}
           {summary.actionSteps && summary.actionSteps.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CheckCircle className="size-5 text-primary" />
-                  How to Get Involved
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <section>
+              <h2 className="text-primary text-sm font-medium uppercase tracking-wide mb-6">
+                Action Items
+              </h2>
+              <div className="space-y-6">
                 {summary.actionSteps.map((action, index) => (
-                  <div key={index} className="border-b last:border-0 pb-4 last:pb-0">
-                    <h3 className="font-medium mb-1">{action.action}</h3>
-                    <p className="text-sm text-muted-foreground mb-2">
+                  <div key={index} className="p-6 bg-card rounded-lg">
+                    <h3 className="font-cinzel text-lg mb-2">{action.action}</h3>
+                    <p className="text-muted-foreground mb-2">
                       {action.details}
                     </p>
                     {action.contactInfo && (
@@ -241,29 +207,41 @@ export default function MeetingDetail({ meetingId }: { meetingId: string }) {
                     )}
                   </div>
                 ))}
-              </CardContent>
-            </Card>
+              </div>
+            </section>
           )}
         </div>
       ) : (
-        <Card>
-          <CardContent className="p-12 text-center">
-            <p className="text-muted-foreground">
-              Summary not yet available for this meeting.
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">
+            Summary not yet available for this meeting.
+          </p>
+          {meeting.status === "processing" && (
+            <p className="text-sm text-muted-foreground mt-2">
+              Currently processing — check back soon.
             </p>
-            {meeting.status === "processing" && (
-              <p className="text-sm text-muted-foreground mt-2">
-                Currently processing - check back soon.
-              </p>
-            )}
-          </CardContent>
-        </Card>
+          )}
+        </div>
       )}
+
+      {/* Orange divider */}
+      <div className="w-16 h-px bg-primary" />
+
+      {/* Email signup CTA */}
+      <section className="text-center">
+        <h2 className="font-cinzel text-xl mb-3">
+          Stay Informed
+        </h2>
+        <p className="text-muted-foreground mb-6">
+          Get notified when new meeting summaries are published.
+        </p>
+        <SubscribeForm />
+      </section>
 
       {/* Disclaimer */}
       <p className="text-xs text-muted-foreground text-center">
         This summary was generated by AI and may contain errors. For official records, 
-        please refer to the city&apos;s official meeting minutes.
+        please refer to the city's official meeting minutes.
       </p>
     </div>
   );

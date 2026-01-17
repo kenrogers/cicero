@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import MeetingsList from "./MeetingsList";
 
 export const metadata: Metadata = {
@@ -14,14 +15,28 @@ export const metadata: Metadata = {
 
 export default function MeetingsPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-4xl px-6 py-12">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Meeting Summaries</h1>
-          <p className="mt-2 text-muted-foreground">
-            Browse AI-powered summaries of Fort Collins City Council meetings.
-          </p>
+    <div className="min-h-screen">
+      <div className="mx-auto max-w-3xl px-6 py-16">
+        {/* Header */}
+        <div className="mb-12">
+          <Link 
+            href="/" 
+            className="wordmark text-2xl hover:text-primary transition-colors"
+          >
+            CICERO
+          </Link>
         </div>
+
+        {/* Title */}
+        <h1 className="font-cinzel text-3xl md:text-4xl mb-4">
+          Meeting Summaries
+        </h1>
+        <p className="text-muted-foreground mb-12">
+          AI-powered summaries of Fort Collins City Council meetings.
+        </p>
+
+        {/* Orange divider */}
+        <div className="w-16 h-px bg-primary mb-12" />
 
         <MeetingsList />
       </div>

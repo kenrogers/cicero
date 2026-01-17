@@ -3,9 +3,7 @@
 import { useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Mail, Loader2, CheckCircle2 } from "lucide-react";
+import { Loader2, CheckCircle2 } from "lucide-react";
 
 export function SubscribeForm() {
   const [email, setEmail] = useState("");
@@ -40,7 +38,7 @@ export function SubscribeForm() {
 
   if (status === "success") {
     return (
-      <div className="flex items-center justify-center gap-2 text-green-600 dark:text-green-400">
+      <div className="flex items-center justify-center gap-2 text-primary">
         <CheckCircle2 className="size-5" />
         <span>{message}</span>
       </div>
@@ -49,33 +47,34 @@ export function SubscribeForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-      <div className="relative flex-1">
-        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-        <Input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            if (status === "error") setStatus("idle");
-          }}
-          className="pl-10"
-          disabled={status === "loading"}
-          required
-        />
-      </div>
-      <Button type="submit" disabled={status === "loading" || !email.trim()}>
+      <input
+        type="email"
+        placeholder="Enter your email"
+        value={email}
+        onChange={(e) => {
+          setEmail(e.target.value);
+          if (status === "error") setStatus("idle");
+        }}
+        className="flex-1 px-4 py-3 bg-card border border-foreground/10 rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+        disabled={status === "loading"}
+        required
+      />
+      <button
+        type="submit"
+        disabled={status === "loading" || !email.trim()}
+        className="px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+      >
         {status === "loading" ? (
-          <>
-            <Loader2 className="size-4 animate-spin mr-2" />
+          <span className="flex items-center gap-2">
+            <Loader2 className="size-4 animate-spin" />
             Subscribing...
-          </>
+          </span>
         ) : (
-          "Get Notified"
+          "Subscribe"
         )}
-      </Button>
+      </button>
       {status === "error" && (
-        <p className="text-sm text-red-500 absolute -bottom-6 left-0">{message}</p>
+        <p className="text-sm text-red-400 sm:absolute sm:-bottom-6 sm:left-0">{message}</p>
       )}
     </form>
   );

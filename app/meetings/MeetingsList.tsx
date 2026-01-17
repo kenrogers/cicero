@@ -2,53 +2,27 @@
 
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import { Calendar, Clock, FileText, Video } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 function formatDate(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
+    month: "short",
     day: "numeric",
+    year: "numeric",
   });
 }
 
-function formatTime(timestamp: number): string {
-  return new Date(timestamp).toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-}
-
-function getMeetingTypeBadge(type: string) {
+function formatMeetingType(type: string): string {
   switch (type) {
     case "regular":
-      return <Badge variant="default">Regular Meeting</Badge>;
+      return "Regular Meeting";
     case "work_session":
-      return <Badge variant="secondary">Work Session</Badge>;
+      return "Work Session";
     case "special":
-      return <Badge variant="outline">Special Meeting</Badge>;
+      return "Special Meeting";
     default:
-      return <Badge variant="secondary">{type}</Badge>;
-  }
-}
-
-function getStatusBadge(status: string) {
-  switch (status) {
-    case "complete":
-      return <Badge className="bg-green-500/10 text-green-600 border-green-500/20">Summary Ready</Badge>;
-    case "processing":
-      return <Badge variant="secondary">Processing...</Badge>;
-    case "pending":
-      return <Badge variant="outline">Coming Soon</Badge>;
-    case "failed":
-      return <Badge variant="destructive">Error</Badge>;
-    default:
-      return null;
+      return type;
   }
 }
 
@@ -57,14 +31,13 @@ export default function MeetingsList() {
 
   if (meetings === undefined) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-6">
         {[1, 2, 3].map((i) => (
-          <Card key={i}>
-            <CardContent className="p-6">
-              <Skeleton className="h-6 w-3/4 mb-2" />
-              <Skeleton className="h-4 w-1/2" />
-            </CardContent>
-          </Card>
+          <div key={i} className="animate-pulse">
+            <div className="h-4 w-24 bg-card rounded mb-2" />
+            <div className="h-6 w-3/4 bg-card rounded mb-2" />
+            <div className="h-4 w-1/2 bg-card rounded" />
+          </div>
         ))}
       </div>
     );
@@ -72,103 +45,75 @@ export default function MeetingsList() {
 
   if (meetings.length === 0) {
     return (
-      <Card>
-        <CardContent className="p-12 text-center">
-          <p className="text-muted-foreground">No meetings found yet.</p>
-          <p className="text-sm text-muted-foreground mt-2">
-            Check back soon - we&apos;re processing City Council meetings.
-          </p>
-        </CardContent>
-      </Card>
+      <div className="text-center py-16">
+        <p className="text-muted-foreground">No meetings found yet.</p>
+        <p className="text-sm text-muted-foreground mt-2">
+          Check back soon — we're processing City Council meetings.
+        </p>
+      </div>
     );
   }
 
   const completedMeetings = meetings.filter((m) => m.status === "complete");
-  const upcomingMeetings = meetings.filter((m) => m.status !== "complete");
+  const processingMeetings = meetings.filter((m) => m.status !== "complete");
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       {completedMeetings.length > 0 && (
-        <div>
-          <h2 className="text-lg font-semibold mb-4">Available Summaries</h2>
-          <div className="space-y-4">
-            {completedMeetings.map((meeting) => (
-              <Link key={meeting._id} href={`/meetings/${meeting._id}`}>
-                <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
-                          {getMeetingTypeBadge(meeting.type)}
-                          {getStatusBadge(meeting.status)}
-                        </div>
-                        <h3 className="font-medium text-lg truncate">
-                          {meeting.title}
-                        </h3>
-                        <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <Calendar className="size-4" />
-                            {formatDate(meeting.date)}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="size-4" />
-                            {formatTime(meeting.date)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 mt-4 text-sm">
-                      {meeting.agendaUrl && (
-                        <span className="flex items-center gap-1 text-muted-foreground">
-                          <FileText className="size-4" />
-                          Agenda
-                        </span>
-                      )}
-                      {meeting.videoUrl && (
-                        <span className="flex items-center gap-1 text-muted-foreground">
-                          <Video className="size-4" />
-                          Video
-                        </span>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
+        <div className="space-y-6">
+          {completedMeetings.map((meeting) => (
+            <Link
+              key={meeting._id}
+              href={`/meetings/${meeting._id}`}
+              className="group block p-6 bg-card rounded-lg hover:bg-card/80 transition-colors"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  {/* Date in orange */}
+                  <p className="text-primary text-sm font-medium mb-2">
+                    {formatDate(meeting.date)}
+                  </p>
+                  
+                  {/* Title */}
+                  <h3 className="font-cinzel text-xl mb-2 group-hover:text-primary transition-colors">
+                    {meeting.title}
+                  </h3>
+                  
+                  {/* Meeting type as subtle text */}
+                  <p className="text-sm text-muted-foreground">
+                    {formatMeetingType(meeting.type)}
+                  </p>
+                </div>
+                
+                {/* Arrow */}
+                <ArrowRight className="size-5 text-muted-foreground group-hover:text-primary transition-colors shrink-0 mt-1" />
+              </div>
+            </Link>
+          ))}
         </div>
       )}
 
-      {upcomingMeetings.length > 0 && (
+      {processingMeetings.length > 0 && (
         <div>
-          <h2 className="text-lg font-semibold mb-4">Processing</h2>
+          <h2 className="text-sm text-muted-foreground uppercase tracking-wide mb-6">
+            Processing
+          </h2>
           <div className="space-y-4">
-            {upcomingMeetings.map((meeting) => (
-              <Card key={meeting._id} className="opacity-60">
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2">
-                        {getMeetingTypeBadge(meeting.type)}
-                        {getStatusBadge(meeting.status)}
-                      </div>
-                      <h3 className="font-medium text-lg truncate">
-                        {meeting.title}
-                      </h3>
-                      <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="size-4" />
-                          {formatDate(meeting.date)}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Clock className="size-4" />
-                          {formatTime(meeting.date)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            {processingMeetings.map((meeting) => (
+              <div
+                key={meeting._id}
+                className="p-6 bg-card/50 rounded-lg opacity-60"
+              >
+                <p className="text-muted-foreground text-sm mb-2">
+                  {formatDate(meeting.date)}
+                </p>
+                <h3 className="font-cinzel text-lg text-muted-foreground">
+                  {meeting.title}
+                </h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {formatMeetingType(meeting.type)} • Processing...
+                </p>
+              </div>
             ))}
           </div>
         </div>

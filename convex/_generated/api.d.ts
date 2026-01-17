@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as councilMembers from "../councilMembers.js";
 import type * as emailer from "../emailer.js";
 import type * as http from "../http.js";
 import type * as lib_securityLogger from "../lib/securityLogger.js";
@@ -33,6 +34,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  councilMembers: typeof councilMembers;
   emailer: typeof emailer;
   http: typeof http;
   "lib/securityLogger": typeof lib_securityLogger;

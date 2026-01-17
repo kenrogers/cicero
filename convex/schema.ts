@@ -7,6 +7,20 @@ export default defineSchema({
     // CICERO: City Council Meeting Summaries
     // ============================================
 
+    councilMembers: defineTable({
+      name: v.string(),
+      role: v.union(
+        v.literal("mayor"),
+        v.literal("mayor_pro_tem"),
+        v.literal("council_member")
+      ),
+      district: v.optional(v.number()),
+      email: v.string(),
+      isActive: v.boolean(),
+    })
+      .index("byName", ["name"])
+      .index("byActive", ["isActive"]),
+
     meetings: defineTable({
       // Municode meeting ID (e.g., "6b92f33287e5498795a9f5193c7374d9")
       municodeId: v.string(),
@@ -57,9 +71,54 @@ export default defineSchema({
           action: v.string(),
           details: v.string(),
           contactInfo: v.optional(v.string()),
+          deadline: v.optional(v.string()),
+          contactEmail: v.optional(v.string()),
+          contactPhone: v.optional(v.string()),
+          submissionUrl: v.optional(v.string()),
+          relatedAgendaItem: v.optional(v.string()),
+          relatedOrdinance: v.optional(v.string()),
+          urgency: v.optional(v.union(
+            v.literal("immediate"),
+            v.literal("upcoming"),
+            v.literal("ongoing")
+          )),
         })
       ),
       transcriptStorageId: v.optional(v.id("_storage")),
+      // Enhanced fields for refined summaries
+      speakerOpinions: v.optional(v.array(
+        v.object({
+          speakerName: v.string(),
+          speakerId: v.optional(v.id("councilMembers")),
+          topicTitle: v.string(),
+          stance: v.union(
+            v.literal("support"),
+            v.literal("oppose"),
+            v.literal("undecided"),
+            v.literal("mixed")
+          ),
+          summary: v.string(),
+          keyArguments: v.array(v.string()),
+          quote: v.optional(v.string()),
+        })
+      )),
+      keyMoments: v.optional(v.array(
+        v.object({
+          timestamp: v.string(),
+          timestampSeconds: v.number(),
+          title: v.string(),
+          description: v.string(),
+          speakerName: v.optional(v.string()),
+          momentType: v.union(
+            v.literal("vote"),
+            v.literal("debate"),
+            v.literal("public_comment"),
+            v.literal("presentation"),
+            v.literal("decision"),
+            v.literal("key_discussion")
+          ),
+        })
+      )),
     })
       .index("byMeetingId", ["meetingId"]),
 
