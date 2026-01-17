@@ -1,107 +1,200 @@
-# Cicero MVP
+# Cicero - Informed Citizens Platform
 
 ## Vision
 
-AI-powered civic engagement tool that makes Fort Collins City Council meetings accessible to everyone. Automatically monitors for new meetings, processes agendas and recordings, and delivers easy-to-digest summaries with actionable next steps.
+**Citizens completely informed on everything they want in minimal time.**
+
+Transform from meeting summaries → personalized civic engagement platform that makes local government accessible to everyone.
 
 ## Problem
 
-- City council meetings are long (2-4 hours)
-- Agendas are dense bureaucratic documents
-- Most citizens don't have time to stay informed
+Citizens face a paradox: local government decisions affect their daily lives more than national politics, yet they're far less informed. Research shows:
+
+- **70%+** of Americans don't know when local meetings happen
+- **60%** of communities are "civic deserts" with few engagement opportunities
+- Top barrier: **information overload** + **lack of relevance filtering**
+- Meetings are long (2-4 hours), agendas are dense bureaucratic documents
 - When people disagree with decisions, they don't know how to take action
+
+**The problem isn't access to information—it's routing the RIGHT information to the RIGHT person at the RIGHT time with CLEAR action steps.**
+
+## What Citizens Want
+
+Based on research (Pew, GovPilot, Granicus, CIRCLE):
+
+- **Relevance**: Only content that affects THEM
+- **Timeliness**: Alerts before decisions, not after
+- **Clarity**: Plain language, not legalese
+- **Actionability**: What to do, who to contact, when
+- **Minimal time**: Informed in <5 min/week
+
+**Topics they care about most:**
+1. Education/Schools
+2. Zoning/Development ("what's being built near me")
+3. Public Safety
+4. Taxes/Budget
+5. Infrastructure
+6. Housing
 
 ## Solution
 
 Cicero automatically:
-1. Monitors for new City Council meetings
-2. Downloads and reads the agenda
-3. Transcribes the meeting recording
-4. Generates a digestible summary
+1. Monitors local government meetings and decisions
+2. Processes agendas, recordings, and documents
+3. Generates digestible summaries with AI
+4. Routes relevant content to subscribers based on topics + location
 5. Provides specific action steps for civic engagement
-6. Emails subscribers when new summaries are ready
+6. Alerts subscribers when participation windows open
 
-## Target User
+## Target Users
 
-Fort Collins residents who want to stay informed about local government but don't have hours to watch meetings.
+### The Busy Professional
+- Works full-time, family obligations
+- Wants to be a good citizen but has no time
+- Needs: Weekly digest, mobile-friendly, 2-minute summaries
 
-## MVP Scope
+### The Engaged Parent
+- Cares deeply about schools, safety, neighborhood
+- Attends some meetings but misses most
+- Needs: Topic alerts (education, zoning), advance notice
 
-### In Scope
-- Fort Collins City Council meetings only (Regular + Work Sessions)
-- Web interface to browse past meeting summaries
-- Email signup for automatic notifications
-- AI-generated summaries with action steps
-- Manual trigger for processing (automated monitoring in v2)
+### The Neighborhood Advocate
+- Active in community, attends meetings regularly
+- Wants comprehensive coverage, not just summaries
+- Needs: Full context, voting records, timeline tracking
 
-### Out of Scope (v2+)
-- Other boards/commissions
-- Paid tier
-- Automated monitoring/scheduling
-- Other cities
-- Mobile app
+## MVP Scope (Complete ✓)
+
+### Delivered
+- ✅ Fort Collins City Council meeting scraping
+- ✅ Agenda PDF parsing + video transcription
+- ✅ AI-generated summaries (topics, decisions, actions)
+- ✅ Web interface to browse past meetings
+- ✅ Email notifications to subscribers
+- ✅ Rate limiting, error handling, SEO
+
+### MVP Limitations
+- City Council only (no boards, county, schools)
+- No personalization (everyone gets everything)
+- No location-based filtering
+- No participation prompts (deadlines, how to act)
+
+## V2 Scope (Next)
+
+### Phase 0: Foundation
+- Topic taxonomy (auto-tag: Housing, Zoning, Budget, etc.)
+- Entity extraction (neighborhoods, streets, projects)
+- Feedback mechanism ("Was this useful?")
+- "Decision + next steps" on every summary
+
+### Phase 1: Participation Radar
+- Topic subscriptions (choose what you care about)
+- Ingest Planning & Zoning + Transportation Board
+- Issue timeline (scheduled → discussed → decided)
+- Weekly personalized digest
+- Urgent alerts (hearing in 72h, comment deadline)
+- Action cards (how to participate, who to contact)
+
+### Phase 2: Location Intelligence
+- Address-based personalization
+- Development applications/permits pipeline
+- Capital improvement projects
+- "Near me" routing
+- Map view of active issues
+
+### Phase 3: Multi-Source Coverage
+- Poudre School District Board
+- Larimer County Commissioners
+- Representative mapping
+- SMS alerts option
+
+### Phase 4: Elections + Accountability
+- Election calendar + ballot measures
+- Voting record tracking
+- Candidate information
+
+## Data Sources
+
+### Tier 1: City of Fort Collins (Current + Expand)
+- City Council (✅ done)
+- Planning & Zoning Commission
+- Transportation Board
+- Development applications/permits
+- Budget documents
+
+### Tier 2: Larimer County
+- County Commissioners
+- Public health board
+
+### Tier 3: Education
+- Poudre School District Board
+
+### Tier 4: Elections
+- Ballot measures
+- Candidate information
 
 ## Technical Architecture
 
 ### Data Flow
 ```
-Municode Site → Scraper → Convex DB
-                    ↓
-           Agenda PDF → AI Summary
-                    ↓
-        Video URL → Transcription → AI Summary
-                    ↓
-              Combined Summary + Actions
-                    ↓
-           Store in Convex → Email Subscribers
-                    ↓
-              Display on Web Interface
+Multiple Sources → Scrapers → Convex DB
+                      ↓
+            Normalize to "Issues"
+                      ↓
+              AI Processing
+         (summarize, tag, extract)
+                      ↓
+            Personalization Engine
+         (match users to issues)
+                      ↓
+            Delivery (email/SMS)
+                      ↓
+           Web Interface + Actions
 ```
-
-### Data Sources
-- **Meeting listings**: https://fortcollins-co.municodemeetings.com/
-- **Agendas**: Azure blob storage PDFs via Municode
-- **Videos**: https://reflect-vod-fcgov.cablecast.tv/
 
 ### Tech Stack
 - **Framework**: Next.js 15 (App Router)
 - **Database**: Convex
 - **Auth**: Clerk
-- **AI**: OpenRouter (summarization)
-- **Transcription**: Whisper API or AssemblyAI
+- **AI**: OpenRouter (GPT-4o-mini)
+- **Transcription**: AssemblyAI
 - **Email**: Resend
 - **Scraping**: Cheerio + fetch
 
-## Key Entities
+## Product Principles
 
-### Meeting
-- id, date, title, type (Regular/Work Session)
-- agendaUrl, agendaPacketUrl, videoUrl
-- status: pending | processing | complete | failed
-- createdAt, processedAt
-
-### Summary
-- id, meetingId
-- tldr (2-3 sentences)
-- keyTopics[] (title, summary, sentiment)
-- decisions[] (what was decided)
-- actionSteps[] (how to engage)
-- fullTranscript (stored separately)
-
-### Subscriber
-- id, email, status (active/unsubscribed)
-- createdAt, lastEmailedAt
+1. **Relevance over comprehensiveness** - Better 3 relevant alerts than 30 generic
+2. **Action over awareness** - Every alert answers "what can I do?"
+3. **Trust through transparency** - Always cite sources, never editorialize
+4. **Respect attention** - Default to digest, urgent alerts only when warranted
+5. **Accessibility first** - Plain language, multiple channels, inclusive design
 
 ## Success Metrics
 
-MVP success = 
-- Can process a real meeting end-to-end
-- Summary is actually useful/readable
-- Email delivery works
-- 10 beta subscribers
+### MVP (Achieved)
+- ✅ Process real meeting end-to-end
+- ✅ Summary is useful/readable
+- ✅ Email delivery works
+
+### V2 Goals
+- >80% of alerts rated "useful" by recipients
+- >20% of users take action per month
+- Users feel informed in <5 min/week
+- >50% weekly active users after 3 months
+- Cover all major local decision-making bodies
+
+## Risks & Mitigations
+
+| Risk | Mitigation |
+|------|------------|
+| AI hallucination | Require citations, quote original text |
+| Perceived bias | Present facts + participation, not opinions |
+| Alert fatigue | Default weekly digest, strict urgent criteria |
+| Privacy concerns | Coarse location storage, transparent controls |
+| Scope creep | Phase-gated rollout, prove each layer |
 
 ## Constraints
 
-- Video transcription can be expensive - need to track costs
-- Meetings are 2-4 hours = ~30-60min of transcription time
-- Rate limit AI calls appropriately
+- Video transcription costs - track and optimize
+- Source reliability - Municode/city sites may change
+- Solo project - prioritize ruthlessly

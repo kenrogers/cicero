@@ -2,13 +2,13 @@
 
 ## Current Status
 
-**Active Phase**: Phase 6 - Polish & Deploy
-**Phase Status**: Complete
-**Overall Progress**: 6/6 phases complete (Phase 1 ✓, Phase 2 ✓, Phase 3 ✓, Phase 4 ✓, Phase 5 ✓, Phase 6 ✓)
+**Active Phase**: Phase 0 - Foundation
+**Phase Status**: Not started
+**Overall Progress**: MVP complete, V2 roadmap defined
 
 ## Quick Context
 
-Building an AI-powered civic engagement tool for Fort Collins City Council meetings. MVP monitors meetings, generates summaries, and emails subscribers.
+Building an AI-powered civic engagement platform for Fort Collins. V2 transforms from "meeting summaries" to "personalized civic engagement" - routing the right info to the right person at the right time.
 
 ## Key Decisions
 
@@ -16,20 +16,39 @@ Building an AI-powered civic engagement tool for Fort Collins City Council meeti
 |----------|--------|-----------|------|
 | AI Provider | OpenRouter | Flexibility to switch models | 2026-01-12 |
 | Email Service | Resend | Good DX, reasonable pricing | 2026-01-12 |
-| Transcription | AssemblyAI | Better for long-form content, simpler API | 2026-01-13 |
+| Transcription | AssemblyAI | Better for long-form, simpler API | 2026-01-13 |
 | Scraping | Cheerio | Sufficient for static HTML | 2026-01-12 |
-| LLM Model | openai/gpt-4o-mini | Cheap, reliable, good at structured JSON | 2026-01-13 |
+| LLM Model | openai/gpt-4o-mini | Cheap, reliable, good at JSON | 2026-01-13 |
+| V2 Direction | Personalization | Research shows relevance is key | 2026-01-17 |
 
-## Data Sources Confirmed
+## V2 Research Insights
 
-- **Municode**: https://fortcollins-co.municodemeetings.com/
-  - Structured meeting listings
-  - PDF agendas on Azure blob storage
-  - Pattern: `mccmeetings.blob.core.usgovcloudapi.net/fortcollco-pubu/MEET-Agenda-{meetingId}.pdf`
-  
-- **Videos**: https://reflect-vod-fcgov.cablecast.tv/
-  - Cablecast VOD platform
-  - Need to extract actual video URL from player page
+**What citizens want:**
+- Relevance - only content that affects THEM
+- Timeliness - alerts before decisions, not after
+- Clarity - plain language, not legalese
+- Actionability - what to do, who to contact
+- Minimal time - informed in <5 min/week
+
+**Topics they care about most:**
+1. Education/Schools
+2. Zoning/Development
+3. Public Safety
+4. Taxes/Budget
+5. Infrastructure
+6. Housing
+
+## Data Sources
+
+### Active
+- **Municode**: https://fortcollins-co.municodemeetings.com/ (City Council)
+
+### Planned
+- Planning & Zoning Commission
+- Transportation Board
+- Development applications
+- Poudre School District
+- Larimer County Commissioners
 
 ## Blockers
 
@@ -37,14 +56,21 @@ None currently.
 
 ## Next Actions
 
-1. Create Phase 6 plan (Polish & Deploy)
-2. Error handling throughout pipeline
-3. Deploy to Vercel + production Convex
+1. Create Phase 0 plan (Foundation)
+2. Add topic taxonomy to existing summaries
+3. Implement feedback mechanism
+4. Add entity extraction for personalization prep
 
 ## Session Notes
 
-### 2026-01-12
-- Project initialized
-- Researched data sources
-- Created PROJECT.md and ROADMAP.md
-- Ready to start Phase 1
+### 2026-01-17
+- V2 research and planning complete
+- Updated PROJECT.md and ROADMAP.md with new vision
+- Core insight: problem is routing, not access
+- Phase 0 focuses on taxonomy foundation
+
+### 2026-01-12 - 2026-01-16
+- MVP phases 1-6 completed
+- Full pipeline working: scrape → transcribe → summarize → email
+- Web interface live at /meetings
+- Ready for production deployment

@@ -62,7 +62,7 @@ export function SubscribeForm() {
       <button
         type="submit"
         disabled={status === "loading" || !email.trim()}
-        className="px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-6 py-3 bg-foreground text-background rounded-md hover:bg-foreground/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {status === "loading" ? (
           <span className="flex items-center gap-2">

@@ -1,134 +1,143 @@
-# Cicero MVP Roadmap
+# Cicero Roadmap
 
 ## Overview
 
-Building the MVP in 6 phases, each delivering testable functionality.
-
 ```
-Phase 1: Data Foundation     → Schema + scraper basics
-Phase 2: Meeting Scraper     → Fetch & store real meetings
-Phase 3: AI Processing       → Transcription + summarization
-Phase 4: Web Interface       → Browse summaries
-Phase 5: Email System        → Subscriber signup + notifications
-Phase 6: Polish & Deploy     → Error handling, testing, launch
+MVP (Complete)     → Meeting summaries + email
+Phase 0: Foundation → Taxonomy + feedback loop
+Phase 1: Radar      → Topic subscriptions + alerts
+Phase 2: Location   → "Near me" + development pipeline  
+Phase 3: Coverage   → Schools, County, Boards
+Phase 4: Elections  → Voting records, ballot measures
 ```
 
-## Phases
+## Completed Phases
 
-### Phase 1: Data Foundation
-**Goal**: Set up Convex schema and basic scraping infrastructure
+### Phase 1-6: MVP ✓
+**Goal**: Working meeting summary + notification system
 
-**Deliverables**:
+**Delivered**:
 - Convex schema for meetings, summaries, subscribers
-- Scraping utility functions (fetch HTML, parse with Cheerio)
-- Environment variables for external services
-
-**Verification**: `npx convex dev --once --typecheck=enable` passes
-
----
-
-### Phase 2: Meeting Scraper
-**Goal**: Scrape real City Council meetings from Municode
-
-**Deliverables**:
-- Scraper that fetches City Council meetings list
-- Parser for meeting details (date, title, agenda URLs, video URL)
-- Convex action to run scraper and store meetings
-- Admin endpoint to trigger scraping
-
-**Verification**: Run scraper, see meetings in Convex dashboard
+- Scraper for Municode meeting listings
+- Video transcription via AssemblyAI
+- AI summarization via OpenRouter
+- Web interface at /meetings
+- Email notifications via Resend
+- Rate limiting, error handling, SEO, loading states
 
 ---
 
-### Phase 3: AI Processing Pipeline
-**Goal**: Process a meeting into a summary
+## Upcoming Phases
+
+### Phase 0: Foundation
+**Goal**: Prepare infrastructure for personalization
 
 **Deliverables**:
-- Video URL extraction from Cablecast pages
-- Audio transcription via Whisper/AssemblyAI
-- Agenda PDF parsing (extract text)
-- OpenRouter integration for summarization
-- Summary generation with topics, decisions, action steps
-- Status tracking (pending → processing → complete)
+- Add topic taxonomy to summaries (Housing, Zoning, Budget, Safety, etc.)
+- Basic entity extraction (neighborhoods, streets, project names)
+- Consistent "decision + next steps" structure
+- Unsubscribe/mute controls
+- Feedback mechanism ("Was this useful?")
 
-**Verification**: Process one real meeting, get usable summary
+**Verification**: Users can identify what happened and what to do next
+
+**Effort**: Small (1-2 weeks)
 
 ---
 
-### Phase 4: Web Interface
-**Goal**: Public site to browse meeting summaries
+### Phase 1: Participation Radar
+**Goal**: Let users choose topics, alert them when it matters
 
 **Deliverables**:
-- Landing page explaining Cicero
-- Meetings list page (past summaries)
-- Individual meeting page (full summary, actions)
-- Email signup form (stores in Convex)
-- Basic navigation and layout
+- Topic subscription system
+- Ingest Planning & Zoning Commission + Transportation Board
+- "Issue" data model (normalized from sources)
+- Issue timeline (scheduled → discussed → decided)
+- Weekly personalized digest (only topics you follow)
+- Urgent alerts (hearing in 72h, comment deadline in 48h)
+- Action cards (what's happening, how to participate)
 
-**Verification**: Can browse real summaries on localhost
+**Verification**: Fewer emails, higher relevance, users take action
+
+**Effort**: Medium (2-4 weeks)
 
 ---
 
-### Phase 5: Email System
-**Goal**: Notify subscribers when new summaries are ready
+### Phase 2: Location Intelligence
+**Goal**: "What's happening near me"
 
 **Deliverables**:
-- Resend integration
-- Email template for meeting summaries
-- Send notification when summary completes
-- Unsubscribe link handling
-- Double opt-in (optional but recommended)
+- Address-based personalization (privacy-aware)
+- Development applications/permits pipeline
+- Capital improvement projects (road work, utilities)
+- "Near me" routing
+- "What changed" diffs for ongoing projects
+- Map view of active issues
 
-**Verification**: Receive test email with real summary
+**Verification**: Residents discover things before they're decided
+
+**Effort**: Medium-Large (4-8 weeks)
 
 ---
 
-### Phase 6: Polish & Deploy
-**Goal**: Production-ready MVP
+### Phase 3: Multi-Source Coverage
+**Goal**: Comprehensive local governance monitoring
 
 **Deliverables**:
-- Error handling throughout pipeline
-- Rate limiting on public endpoints
-- Loading states and error pages
-- SEO basics (meta tags, OG images)
-- Deploy to Vercel
-- Production Convex deployment
+- Poudre School District Board
+- Larimer County Commissioners
+- Downtown Development Authority
+- Representative mapping (who represents you)
+- Expanded action cards per governing body
+- SMS alerts option
+- Issue deduplication across sources
 
-**Verification**: Live site processing real meetings
+**Verification**: Cicero = default local politics briefing
+
+**Effort**: Large (1-2 months)
+
+---
+
+### Phase 4: Elections + Accountability
+**Goal**: Complete civic engagement lifecycle
+
+**Deliverables**:
+- Election calendar integration
+- Ballot measure plain-language summaries
+- Candidate information aggregation
+- Voting record tracking (how reps voted on your issues)
+- Issue outcome tracking
+
+**Verification**: Users rely on Cicero for governance AND elections
+
+**Effort**: Large (1-2 months, timed to election cycles)
 
 ---
 
 ## Dependencies
 
 ```
-Phase 1 ──→ Phase 2 ──→ Phase 3 ──→ Phase 4
-                              ↘     ↗
-                               Phase 5
-                                  ↓
-                              Phase 6
+MVP ✓ ──→ Phase 0 ──→ Phase 1 ──→ Phase 2
+                           ↘         ↗
+                            Phase 3
+                               ↓
+                            Phase 4
 ```
 
-Phase 4 and 5 can run in parallel after Phase 3.
+Phase 2 and 3 can run in parallel after Phase 1.
 
-## Estimated Timeline
+## Timeline Estimate
 
-| Phase | Effort | Notes |
-|-------|--------|-------|
-| 1 | Small | Schema + utilities |
-| 2 | Medium | Scraping can be tricky |
-| 3 | Large | Video processing is complex |
-| 4 | Medium | Standard Next.js pages |
-| 5 | Small | Resend is straightforward |
-| 6 | Medium | Depends on issues found |
-
-## Risk Areas
-
-1. **Video extraction**: Cablecast may not have direct URLs, might need browser automation
-2. **Transcription costs**: Long videos = expensive. May need to chunk or use cheaper service
-3. **Scraping reliability**: Municode HTML structure could change
-4. **AI quality**: Summary usefulness depends on prompt engineering
+| Phase | Effort | Status |
+|-------|--------|--------|
+| MVP | Complete | ✓ |
+| 0 | 1-2 weeks | Not started |
+| 1 | 2-4 weeks | Not started |
+| 2 | 4-8 weeks | Not started |
+| 3 | 1-2 months | Not started |
+| 4 | 1-2 months | Not started |
 
 ## Current Status
 
-**Active Phase**: Not started
-**Completed**: None
+**Active Phase**: Phase 0 (Foundation)
+**Overall Progress**: MVP complete, V2 planning done
